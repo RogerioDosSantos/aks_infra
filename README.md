@@ -107,7 +107,7 @@ service:
 
 Azure will then create a DNS label for the public IP, allowing you to access your service via `example.<region>.cloudapp.azure.com`.
 
-- **Note 01**: This only works **at the time the public IP is created**. 
+- **Note 01**: ~~This only works **at the time the public IP is created**.~~. This seems to work even if the public IP already exists. 
 - **Note 02**: The DNS label must be unique across all public IPs in the Azure region. Suffix your label with a unique identifier if necessary (E.g.: `{{.Release.Name}}`).
 - **Note 03**: There is no native command on Helm, kubectl, or Azure CLI to get the FQDN of a public IP created by a Helm chart. You can use the (./devops/scripts/Get-AksServiceFqdn.ps1) script to retrieve the FQDN of a service created by a Helm chart.
 
