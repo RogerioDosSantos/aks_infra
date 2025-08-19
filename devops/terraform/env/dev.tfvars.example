@@ -1,0 +1,4 @@
+# Example dev.tfvars
+
+# Replace with your actual Azure Subscription ID
+subscription_id = "<your-azure-subscription-id>"

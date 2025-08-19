@@ -4,3 +4,14 @@
 
 /.vs
 /docs/poweshell_session.md
+/devops/terraform/dev/.terraform/providers/registry.terraform.io/hashicorp
+/devops/terraform/dev/.terraform.lock.hcl
+/devops/terraform/powershell_session_transcription.md
+/devops/terraform/env/dev.tfvars
+/devops/terraform/dev/terraform.tfstate
+/devops/terraform/dev/terraform.tfstate.backup
+/ai_prompts
+/devops/terraform/model/.terraform/providers/registry.terraform.io/hashicorp
+/devops/terraform/model/.terraform.lock.hcl
+/devops/terraform/model/terraform.tfstate
+/devops/terraform/model/terraform.tfstate.backup

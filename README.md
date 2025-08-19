@@ -1,18 +1,102 @@
-# AKS Infrastructure Template
+﻿# AKS Infrastructure Template
 
-This repository provides infrastructure as code for deploying a sample Python REST API application to Kubernetes using Helm and Helmfile.
+---
 
-## What this project does
+## 📖 Overview
 
-- **Python REST API**: Implements a simple REST API using Flask, exposing a `/hello` endpoint that returns a JSON response `{ "data": "Hello World" }` on GET requests.
-- **Dockerized Application**: The application is containerized using a Dockerfile based on Python 3.8, installing dependencies from `requirements.txt` and running the Flask app on port 9001.
-- **Helm Chart**: The `python-rest-api` Helm chart allows customizable deployment options, including replica count, image repository, service type (default NodePort on 9001), ingress, resources, and more via `values.yaml`.
-- **Helmfile Management**: The `helmfile.yaml` file manages the deployment of the Helm chart, making it easy to define, sync, and apply release configurations.
-- **Kubernetes Ready**: The setup supports local development with MicroK8s and Multipass, as well as deployment to Azure Kubernetes Service (AKS) or any other Kubernetes cluster.
+This repository provides a complete, modular infrastructure as code solution for deploying a sample Python REST API application to Kubernetes on Azure. The stack leverages **Terraform** for infrastructure provisioning, **Helm/Helmfile** for Kubernetes application deployment, and includes a simple, containerized Flask API as an example workload.
 
-# Use full commands
+---
 
-## Helm
+## 🗂️ Repository Structure
+
+| Directory/File                | Purpose                                                                 |
+|-------------------------------|-------------------------------------------------------------------------|
+| `apps/python-rest-api/`       | Source code and Dockerfile for the sample Python REST API application   |
+| `devops/terraform/`           | Terraform configuration for Azure infrastructure and AKS cluster        |
+| `devops/helm/`                | Helm chart and Helmfile for deploying the API to Kubernetes             |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Provision Azure Infrastructure with Terraform
+
+> 📌 **See:** [`devops/terraform/README.md`](devops/terraform/README.md) for full details and troubleshooting.
+
+- Authenticate with Azure:
+  ```sh
+  az login
+  ```
+- Initialize and apply Terraform (from the `model/` directory):
+  ```sh
+  cd devops/terraform/model
+  terraform init
+  terraform apply -var-file="../env/dev.tfvars"
+  ```
+- Configure `kubectl` access to your new AKS cluster:
+  ```sh
+  az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw kubernetes_cluster_name)
+  ```
+
+### 2. Build and Publish the Python REST API Docker Image (Optional)
+
+> 📌 **See:** [`apps/python-rest-api/README.md`](apps/python-rest-api/README.md) for local development, Docker build, and publishing instructions.
+
+- Build the Docker image:
+  ```sh
+  docker build -t python-rest-api ./apps/python-rest-api
+  ```
+- (Optional) Push to Docker Hub:
+  ```sh
+  docker tag python-rest-api <your-dockerhub-username>/python-rest-api:latest
+  docker push <your-dockerhub-username>/python-rest-api:latest
+  ```
+
+### 3. Deploy to Kubernetes with Helm or Helmfile
+
+> 📌 **See:** [`devops/helm/README.md`](devops/helm/README.md) for full Helm/Helmfile usage and customization.
+
+- Deploy using Helmfile (recommended):
+  ```sh
+  cd devops/helm
+  helmfile sync
+  ```
+- Or deploy using Helm directly:
+  ```sh
+  helm install <release_name> ./python-rest-api
+  ```
+
+---
+
+## 🧩 Components
+
+### Python REST API
+- Minimal Flask API exposing `/hello` endpoint.
+- Containerized for portability and easy deployment.
+- See [`apps/python-rest-api/README.md`](apps/python-rest-api/README.md) for details.
+
+### Terraform Infrastructure
+- Provisions Azure Resource Group and AKS cluster.
+- Modular, environment-based configuration.
+- See [`devops/terraform/README.md`](devops/terraform/README.md) for usage, variables, and troubleshooting.
+
+### Helm & Helmfile Deployment
+- Helm chart for the Python REST API with customizable values.
+- Helmfile for declarative, multi-environment release management.
+- See [`devops/helm/README.md`](devops/helm/README.md) for deployment and customization.
+
+---
+
+## 🛠️ Troubleshooting & Useful Commands
+
+- **Terraform:** See troubleshooting in [`devops/terraform/README.md`](devops/terraform/README.md)
+- **Helm/Helmfile:** See troubleshooting in [`devops/helm/README.md`](devops/helm/README.md)
+- **Python REST API:** See [`apps/python-rest-api/README.md`](apps/python-rest-api/README.md)
+
+### Use full commands
+
+#### Helm
 
 - `helm list` # List releases
 - `helm list -a` # List all releases, including those that are deleted or failed
@@ -34,12 +118,12 @@ This repository provides infrastructure as code for deploying a sample Python RE
 - `helm lint <chart>` # Lint a chart to check for issues
 - `helm show readme <chart> [--version <version>]` # Show the README for a chart, optionally for a specific version
 
-### HelmFile
+##### HelmFile
 
-- `helmfile sync` # Synchronize the state of releases defined in the Helmfile with the cluster`
+- `helmfile sync` # Synchronize the state of releases defined in the Helmfile with the cluster
 - `helmfile apply` # Apply the Helmfile configuration, installing or upgrading releases as defined
 
-## kubectl
+#### kubectl
 
 - `kubectl get services` # List all services in the current namespace with among others, the IP address and port
 - `kubectl get pods` # List all pods in the current namespace
@@ -51,9 +135,9 @@ This repository provides infrastructure as code for deploying a sample Python RE
 - `kubectl exec -it <pod_name> -- /bin/sh` # Execute a command inside a pod
 - `kubectl port-forward <pod_name> <local_port>:<remote_port>` # Forward one or more local ports to a pod
 
-### MicroK8s
+##### MicroK8s
 
-- `microk8s dashboard-proxy` # Start the dashboard proxy`
+- `microk8s dashboard-proxy` # Start the dashboard proxy
 - `microk8s dashboard` # Open the MicroK8s dashboard in your browser
 - `microk8s status` # Show the status of MicroK8s and enabled add-ons
 - `microk8s enable <addon>` # Enable an add-on (e.g., dns, dashboard, ingress)
@@ -67,7 +151,7 @@ This repository provides infrastructure as code for deploying a sample Python RE
 - `microk8s upgrade` # Upgrade MicroK8s to the latest version
 - `microk8s inspect` # Run a diagnostics of the MicroK8s installation
 
-### Multipass
+##### Multipass
 
 - `multipass launch` # Launch a new instance
 - `multipass list` # List all instances and their IP addresses
@@ -82,101 +166,14 @@ This repository provides infrastructure as code for deploying a sample Python RE
 - `multipass mount <host_path> <instance>:<mount_path>` # Mount a local directory into an instance
 - `multipass unmount <instance>:<mount_path>` # Unmount a directory from an instance
 
-# Helm Workflow / Architecture
+---
 
-This section describes the architecture and several workflows of using Helm in general
+## 📚 References & Further Reading
 
-## Helm Debug - Dry-Run
-
-![](./docs/helm_debug_dry_run.png)
-
-This diagram illustrates the Helm debug and dry-run workflow. 
-It shows how Helm interacts with the Kubernetes API server to render templates and validate configurations without making any changes to the cluster.
-Once its verified, you can proceed with the actual deployment.
-The dry-run option can be used with the `helm install` and `helm upgrade` commands to simulate the deployment process. As for example:
-```powershell
-helm install <release_name> <chart> --dry-run --debug
-```
-
-
-## Troubleshooting
-
-### kubectl or helm commands cannot connect with the microk8s cluster after machine restart
-
-Commonly this issue occours because the ip address of the multipass VM has changed after a restart.
-By default, Multipass uses DHCP via Hyper-V�s default virtual switch. That means every time the VM or host reboots, it may get a new IP address. Kubernetes (and tools like MicroK8s) don�t love that.
-
-You can check if the ip of the matches the one of the error message by running the following command:
-
-```powershell
-multipass list
-```
-
-To fix this issue, you can update the kubeconfig file to point to the new IP address of the MicroK8s VM. 
-You can do this by running the following command:
-
-```powershell
-microk8s config > $HOME\.kube\config
-```
-
-### You cannot access a service via the browser
-
-If you configured the service to be exposed NodePort, you need to make sure you are accessing with the correct IP address and port.
-
-You can find the NodePort by running:
-```powershell
-kubectl get services
-```
-
-You need to use the IP address of the multipass VM, which you can find by running:
-```powershell
-multipass list
-```
-### Certificate issues due to VM IP address change (Reset MicroK8s)
-
-1. Enter your Multipass VM:
-
-   ```sh
-   multipass shell <vm-name>
-   ```
-
-2. Remove MicroK8s completely:
-
-   ```sh
-   sudo snap remove microk8s --purge
-   ```
-
-3. Delete leftover MicroK8s data and certificates:
-
-   ```sh
-   sudo rm -rf /var/snap/microk8s
-   rm -rf ~/.kube
-   ```
-
-4. (Optional) Clear iptables rules:
-
-   ```sh
-   sudo iptables -F
-   sudo iptables -t nat -F
-   ```
-
-5. Reinstall MicroK8s:
-
-   ```sh
-   sudo snap install microk8s --classic
-   ```
-
-6. Enable dashboard (if needed):
-
-   ```sh
-   microk8s enable dashboard
-   ```
-
-# References and More Information
+- [Terraform Documentation](https://www.terraform.io/docs/)
 - [Helm Documentation](https://helm.sh/docs/)
-- [MicroK8s Documentation](https://microk8s.io/docs/)
-- [Multipass Documentation](https://multipass.run/docs)
+- [Helmfile Documentation](https://github.com/roboll/helmfile)
 - [Azure Kubernetes Service Documentation](https://docs.microsoft.com/en-us/azure/aks/)
+- [Kubernetes Documentation](https://kubernetes.io/docs/)
 
-## Additional Credits
-This template is inspired by the excelent video [Complete Helm Chart Tutorial: From Beginner to Expert Guide](https://www.youtube.com/watch?v=DQk8HOVlumI&list=PLwP0_p1bqAOWhKGcfDLMw8nIHfkTf0p9E&index=59) by *Rahul Wagh*.
+---

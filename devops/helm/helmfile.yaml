@@ -2,4 +2,4 @@
 releases:
   - name: python-rest-api-dev
     chart: python-rest-api
-    installed: false
+    installed: true
