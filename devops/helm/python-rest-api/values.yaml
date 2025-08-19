@@ -56,6 +56,10 @@ service:
   type: LoadBalancer
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 9001
+  # This requests Azure to create a FQDN (Fully Qualified Domain Name) for the service once the service public IP is assigned. 
+  # The FQDN will be in the format <dnsLabel>.<region>.cloudapp.azure.com
+  # The `.Release.Name` is used to ensure that the DNS label is unique across all deployments.
+  dnsLabel: roger-python-api
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:

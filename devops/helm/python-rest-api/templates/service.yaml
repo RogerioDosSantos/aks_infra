@@ -4,6 +4,8 @@ metadata:
   name: {{ include "python-rest-api.fullname" . }}
   labels:
     {{- include "python-rest-api.labels" . | nindent 4 }}
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: "{{ .Values.service.dnsLabel }}-{{ now | date "020106" }}-{{ randAlphaNum 4 | lower }}"
 spec:
   type: {{ .Values.service.type }}
   ports:

@@ -69,6 +69,74 @@ This repository provides a complete, modular infrastructure as code solution for
 
 ---
 
+## 🌐 DNS labels (FQDNs) for public IPs
+
+When using LoadBalancer services in Kubernetes, Azure assigns a public IP **without** a DNS label. 
+
+To create a DNS label for your public IP, you can use the following **Terraform** configuration:
+
+```hcl
+resource "azurerm_public_ip" "example" {
+  name                = "example-ip"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.example.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  domain_name_label   = "example"
+}
+```
+
+And then reference this public IP in your Helm service definition:
+```yaml
+service:
+  loadBalancerIP: azurerm_public_ip.example.ip_address
+```
+
+Or you can configure the DNS label on the **Helm chart** by adding the following to your `values.yaml`:
+
+```yaml
+service:
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: "example" 
+```
+
+Azure will then create a DNS label for the public IP, allowing you to access your service via `example.<region>.cloudapp.azure.com`.
+
+- **Note 01**: This only works **at the time the public IP is created**. 
+- **Note 02**: The DNS label must be unique across all public IPs in the Azure region. Suffix your label with a unique identifier if necessary (E.g.: `{{.Release.Name}}`).
+- **Note 03**: There is no native command on Helm, kubectl, or Azure CLI to get the FQDN of a public IP created by a Helm chart. You can use the (./devops/scripts/Get-AksServiceFqdn.ps1) script to retrieve the FQDN of a service created by a Helm chart.
+
+If the IP already exists, and you do not want to recreate the service, you’ll need to update it manually using az network public-ip update:
+
+```sh
+az network public-ip update --name <public_ip_name> --resource-group <resource_group_name> --set dnsSettings.domainNameLabel=<new_label>
+```
+
+### ✅ Best Practice: Use Terraform for Public IP + DNS, Helm for App Deployment
+
+#### Terraform:
+
+- Create the public IP with a DNS label 
+- Optionally create a static IP for reuse
+- Pass the IP to your Helm chart via values
+
+#### Helm:
+
+- Deploy the service or ingress controller
+- Reference the static IP via loadBalancerIP
+- Use annotations if you want Azure to create the IP (but lose control over DNS)
+
+**Note:** This project is requesting the FQDN for the public IPs created by the Helm chart (./devops/helm/python-rest-api/templates/service.yaml and ./devops/helm/python-rest-api/values.yaml), since we are expecting to do not know the Services that will be created in advance.
+In a production environment, you would typically create the public IPs with Terraform and then pass them to your Helm chart as values.
+
+Here is a table illustrating the differences between using Terraform and Helm for public IP and DNS management:
+
+| Approach                | Control | Flexibility | Best For          |
+|-------------------------|---------|-------------|-------------------|
+| Helm annotations        | Low     | High        | Dev/test apps      |
+| Terraform public IPs    | High    | Medium      | Production apps    |
+| Azure DNS zone          | Very High| High       | Custom domains     |
+
 ## 🧩 Components
 
 ### Python REST API
@@ -94,7 +162,7 @@ This repository provides a complete, modular infrastructure as code solution for
 - **Helm/Helmfile:** See troubleshooting in [`devops/helm/README.md`](devops/helm/README.md)
 - **Python REST API:** See [`apps/python-rest-api/README.md`](apps/python-rest-api/README.md)
 
-### Use full commands
+### Usefull commands
 
 #### Helm
 
