@@ -1,10 +1,15 @@
-﻿# AKS Infrastructure Template
+﻿# AKS Infrastructure (For Development and Testing))
 
 ---
 
 ## 📖 Overview
 
-This repository provides a complete, modular infrastructure as code solution for deploying a sample Python REST API application to Kubernetes on Azure. The stack leverages **Terraform** for infrastructure provisioning, **Helm/Helmfile** for Kubernetes application deployment, and includes a simple, containerized Flask API as an example workload.
+This repository provides a complete, modular infrastructure as code solution for deploying multiple applications to Kubernetes on Azure for development and testing purposes. 
+The stack leverages **Terraform** for infrastructure provisioning, **Helm/Helmfile** for Kubernetes application deployment.
+
+### Applications
+
+- **Python REST API**: A minimal Flask application exposing a `/hello` endpoint, containerized for easy deployment, test and as an example workload.
 
 ---
 

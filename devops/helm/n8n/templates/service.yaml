@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "n8n.fullname" . }}
+  labels:
+    {{- include "n8n.labels" . | nindent 4 }}
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: "{{ .Values.service.dnsLabel }}-aks-infra-dev"
+    # service.beta.kubernetes.io/azure-dns-label-name: "{{ .Values.service.dnsLabel }}-{{ now | date "020106" }}-{{ randAlphaNum 4 | lower }}"
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "n8n.selectorLabels" . | nindent 4 }}
