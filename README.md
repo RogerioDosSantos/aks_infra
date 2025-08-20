@@ -142,6 +142,23 @@ Here is a table illustrating the differences between using Terraform and Helm fo
 | Terraform public IPs    | High    | Medium      | Production apps    |
 | Azure DNS zone          | Very High| High       | Custom domains     |
 
+## 🔐 Sensitive Configuration: values-secrets.yaml
+
+Some Helm charts in this repository require sensitive configuration values (such as DNS labels, FQDNs, and email addresses for certificate registration) that should never be committed to version control.
+
+- The file `devops/helm/reverse-proxy/values-secrets.yaml` is used to provide these secrets for the reverse proxy Helm chart.
+- **This file must NOT be checked in to git.** It should be listed in your `.gitignore`.
+- Instead, use the provided template: `devops/helm/reverse-proxy/values-secrets-example.yaml`.
+
+### Usage Instructions
+1. **Copy or rename** `devops/helm/reverse-proxy/values-secrets-example.yaml` to `devops/helm/reverse-proxy/values-secrets.yaml`.
+2. Fill in your real, environment-specific values (DNS label, FQDN, email, etc.).
+3. Keep `values-secrets.yaml` local and never commit it to the repository.
+
+> For more details, see the comments in the example file.
+
+---
+
 ## 🧩 Components
 
 ### Python REST API

@@ -1,6 +1,6 @@
 apiVersion: v2
 name: reverse-proxy
-description: A Helm chart for Kubernetes
+description: A Helm chart for deploying a reverse proxy in Kubernetes. We are using Caddy as the reverse proxy.
 
 # A chart can be either an 'application' or a 'library' chart.
 #

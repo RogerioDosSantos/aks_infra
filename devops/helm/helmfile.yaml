@@ -3,16 +3,16 @@ releases:
 
   - name: reverse-proxy-dev
     chart: reverse-proxy
-    # installed: false
     installed: true
+    values:
+      - reverse-proxy/values.yaml
+      - reverse-proxy/values-secrets.yaml
 
   # - name: python-rest-api-dev
   #   chart: python-rest-api
-  #   # installed: false
   #   installed: true
 
   # - name: n8n-dev
   #   chart: n8n
-  #   installed: false
   #   # installed: true
 

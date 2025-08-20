@@ -15,3 +15,5 @@
 /devops/terraform/model/.terraform.lock.hcl
 /devops/terraform/model/terraform.tfstate
 /devops/terraform/model/terraform.tfstate.backup
+/devops/helm/reverse-proxy/values-secrets.yaml
+/temp.md
