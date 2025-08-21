@@ -51,13 +51,15 @@ securityContext: {}
 
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
-  type: LoadBalancer
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  type: NodePort
   port: 5678
   dnsLabel: "n8n"
-  host: "n8n-aks-infra-dev.centralus.cloudapp.azure.com"
   protocol: https
+  n8nPath: "/n8n"
+  enforceSettingsFilePermissions: true
+  runnersEnabled: true
+  genericTimezone: "America/Chicago"
+  dbSqlitePoolSize: 10
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -125,15 +127,3 @@ tolerations: []
 
 affinity: {}
 
-# Timezone for the n8n container
-# If not set, defaults to "America/Chicago" in the deployment template
-genericTimezone: "America/Chicago"
-
-# This setting automatically enforces permissions on the settings file
-enforceSettingsFilePermissions: true
-
-# This setting controls the SQLite connection pool size
-dbSqlitePoolSize: 10
-
-# This setting enables or disables the n8n runners feature
-runnersEnabled: true

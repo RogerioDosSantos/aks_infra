@@ -17,3 +17,4 @@
 /devops/terraform/model/terraform.tfstate.backup
 /devops/helm/reverse-proxy/values-secrets.yaml
 /temp.md
+/devops/helm/n8n/values-secrets.yaml

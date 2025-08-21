@@ -144,18 +144,31 @@ Here is a table illustrating the differences between using Terraform and Helm fo
 
 ## 🔐 Sensitive Configuration: values-secrets.yaml
 
-Some Helm charts in this repository require sensitive configuration values (such as DNS labels, FQDNs, and email addresses for certificate registration) that should never be committed to version control.
+Some Helm charts in this repository require sensitive configuration values (such as DNS labels, FQDNs, email addresses, or service URLs) that should never be committed to version control.
 
-- The file `devops/helm/reverse-proxy/values-secrets.yaml` is used to provide these secrets for the reverse proxy Helm chart.
-- **This file must NOT be checked in to git.** It should be listed in your `.gitignore`.
-- Instead, use the provided template: `devops/helm/reverse-proxy/values-secrets-example.yaml`.
+- The file `devops/helm/reverse-proxy/values-secrets.yaml` is used to provide secrets for the reverse proxy Helm chart.
+- The file `devops/helm/n8n/values-secrets.yaml` is used to provide secrets for the n8n Helm chart.
+- **These files must NOT be checked in to git.** They should be listed in your `.gitignore`.
+- Instead, use the provided templates: `devops/helm/reverse-proxy/values-secrets-example.yaml` and `devops/helm/n8n/values-secrets-example.yaml`.
 
 ### Usage Instructions
-1. **Copy or rename** `devops/helm/reverse-proxy/values-secrets-example.yaml` to `devops/helm/reverse-proxy/values-secrets.yaml`.
-2. Fill in your real, environment-specific values (DNS label, FQDN, email, etc.).
+1. **Copy or rename** the relevant `*-example.yaml` file to `values-secrets.yaml` in the same directory.
+2. Fill in your real, environment-specific values (DNS label, FQDN, email, service host, etc.).
 3. Keep `values-secrets.yaml` local and never commit it to the repository.
 
-> For more details, see the comments in the example file.
+> For more details, see the comments in the example files.
+
+---
+
+## 🚫 Never Commit Sensitive Secrets (n8n)
+
+Sensitive configuration values for the n8n Helm chart (such as service host and baseUrl) must never be committed to version control. Always use a file named `values-secrets.yaml` for your real secrets, and ensure it is listed in your `.gitignore`.
+
+- Use the provided `devops/helm/n8n/values-secrets-example.yaml` as a template.
+- Copy or rename it to `values-secrets.yaml` and fill in your real values.
+- **Never check in `values-secrets.yaml` to the repository.**
+
+For more details, see the comments in the example file.
 
 ---
 
@@ -278,3 +291,13 @@ The configuration for the reverse-proxy (including routing, TLS, and redirects) 
 - [Kubernetes Documentation](https://kubernetes.io/docs/)
 
 ---
+
+## ⚠️ Let's Encrypt Rate Limiting Error
+
+If you encounter the following error during deployment or certificate provisioning:
+
+```
+next InitializeSecurityContext failed: SEC_E_INTERNAL_ERROR (0x80090304) - The Local Security Authority cannot be contacted
+```
+
+This is often caused by hitting Let's Encrypt's rate limits for certificate requests. **Let's Encrypt allows a maximum of 5 certificates per domain every 168 hours (7 days).** If you see this error, wait before retrying or review your certificate request frequency. For more details, see the [Let's Encrypt Rate Limits documentation](https://letsencrypt.org/docs/rate-limits/).

@@ -27,7 +27,13 @@ spec:
             - name: caddy-config
               mountPath: /etc/caddy/Caddyfile
               subPath: Caddyfile
+            - name: caddy-data
+              mountPath: /data/caddy
       volumes:
         - name: caddy-config
           configMap:
             name: {{ include "reverse-proxy.fullname" . }}-config
+        - name: caddy-data
+          persistentVolumeClaim:
+            claimName: caddy-data-pvc
+

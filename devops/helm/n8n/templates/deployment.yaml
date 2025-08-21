@@ -62,20 +62,26 @@ spec:
           {{- end }}
           # Set environment variables for the container
           env:
-            - name: GENERIC_TIMEZONE
-              value: "{{ .Values.genericTimezone | default "America/Chicago" }}"
             - name: N8N_HOST
-              value: "{{ .Values.service.host | default "localhost" }}"
+              value: "{{ .Values.service.host | default "your-fqdn" }}"
             - name: N8N_PORT
               value: "{{ .Values.service.port | default "5678" }}"
             - name: N8N_PROTOCOL
               value: "{{ .Values.service.protocol | default "http" }}"
+            - name: N8N_EDITOR_BASE_URL
+              value: "{{ .Values.service.baseUrl | default "https://your-fqdn/n8n" }}"
+            - name: N8N_PATH
+              value: "{{ .Values.service.n8nPath | default "/n8n" }}"
             - name: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
-              value: "{{ .Values.enforceSettingsFilePermissions | default "true" }}"
-            - name: DB_SQLITE_POOL_SIZE
-              value: "{{ .Values.dbSqlitePoolSize | default "10" }}"
+              value: "{{ .Values.service.enforceSettingsFilePermissions | default "true" }}"
             - name: N8N_RUNNERS_ENABLED
-              value: "{{ .Values.runnersEnabled | default "true" }}"
+              value: "{{ .Values.service.runnersEnabled | default "true" }}"
+            - name: WEBHOOK_TUNNEL_URL
+              value: "{{ .Values.service.baseUrl | default "https://your-fqdn/n8n" }}"
+            - name: GENERIC_TIMEZONE
+              value: "{{ .Values.service.genericTimezone | default "America/Chicago" }}"
+            - name: DB_SQLITE_POOL_SIZE
+              value: "{{ .Values.service.dbSqlitePoolSize | default "10" }}"
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}

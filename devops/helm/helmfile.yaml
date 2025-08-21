@@ -8,11 +8,13 @@ releases:
       - reverse-proxy/values.yaml
       - reverse-proxy/values-secrets.yaml
 
-  # - name: python-rest-api-dev
-  #   chart: python-rest-api
-  #   installed: true
+  - name: python-rest-api-dev
+    chart: python-rest-api
+    installed: true
 
-  # - name: n8n-dev
-  #   chart: n8n
-  #   # installed: true
-
+  - name: n8n-dev
+    chart: n8n
+    installed: true
+    values:
+      - n8n/values.yaml
+      - n8n/values-secrets.yaml
