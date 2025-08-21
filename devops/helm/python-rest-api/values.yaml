@@ -53,7 +53,7 @@ securityContext: {}
 service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   # Possible values: ClusterIP, NodePort, LoadBalancer, ExternalName
-  type: LoadBalancer
+  type: NodePort
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 9001
   # This requests Azure to create a FQDN (Fully Qualified Domain Name) for the service once the service public IP is assigned. 

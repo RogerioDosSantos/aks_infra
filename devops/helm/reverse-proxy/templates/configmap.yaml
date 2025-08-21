@@ -19,8 +19,8 @@ data:
             respond "Under Construction" 200
         }
 
-        handle /python-rest-api-dev* {
-            reverse_proxy python-rest-api-dev.default.svc.cluster.local:9001
+        handle_path /api/python-rest* {
+            reverse_proxy python-rest-api-dev:9001
         }
 
         handle /wiki {

@@ -159,6 +159,17 @@ Some Helm charts in this repository require sensitive configuration values (such
 
 ---
 
+## ⚙️ Reverse Proxy Configuration
+
+The configuration for the reverse-proxy (including routing, TLS, and redirects) is defined in the [devops/helm/reverse-proxy/templates/configmap.yaml](devops/helm/reverse-proxy/templates/configmap.yaml) file.
+
+- **Section to edit:** The `data.Caddyfile` block inside the ConfigMap YAML.
+- Update this section to customize routes, proxy rules, or TLS settings for your environment.
+
+> [View or edit the reverse-proxy ConfigMap](devops/helm/reverse-proxy/templates/configmap.yaml)
+
+---
+
 ## 🧩 Components
 
 ### Python REST API
