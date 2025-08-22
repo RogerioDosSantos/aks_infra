@@ -4,8 +4,8 @@ metadata:
   name: caddy-data-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 100Mi
-  storageClassName: default  # or "managed-premium" if you prefer
+  storageClassName: azurefile

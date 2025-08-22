@@ -6,10 +6,10 @@ metadata:
     app: {{ include "reverse-proxy.name" . }}
 data:
   Caddyfile: |
-    # Redirect HTTP to HTTPS
-    http:// {
-        redir https://{host}{uri}
-    }
+    # # Redirect HTTP to HTTPS
+    # http:// {
+    #     redir https://{host}{uri}
+    # }
 
     # HTTPS site configuration
     {{ .Values.reverseProxy.url }} {
