@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: n8n-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # persistentVolumeReclaimPolicy: Retain
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: default #managed-csi  # Use managed-premium for SSD

@@ -56,7 +56,7 @@ service:
   dnsLabel: "n8n"
   protocol: https
   n8nPath: "/n8n/"
-  enforceSettingsFilePermissions: true
+  enforceSettingsFilePermissions: false  # This is to avoid change it on aks pvc (azure file share)
   runnersEnabled: true
   genericTimezone: "America/Chicago"
   dbSqlitePoolSize: 10
@@ -108,18 +108,17 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+# # Additional volumes on the output Deployment definition.
+# volumes:
+#   - name: n8n-data
+#     persistentVolumeClaim:
+#       claimName: n8n-data-pvc
 
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+# # Additional volumeMounts on the output Deployment definition.
+# volumeMounts:
+#   - name: n8n-data
+#     mountPath: /home/node/.n8n
+#     readOnly: false
 
 nodeSelector: {}
 

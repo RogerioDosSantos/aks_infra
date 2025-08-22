@@ -73,7 +73,7 @@ spec:
             - name: N8N_PATH
               value: "{{ .Values.service.n8nPath | default "/n8n" }}"
             - name: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
-              value: "{{ .Values.service.enforceSettingsFilePermissions | default "true" }}"
+              value: "{{ .Values.service.enforceSettingsFilePermissions | default "false" }}"
             - name: N8N_RUNNERS_ENABLED
               value: "{{ .Values.service.runnersEnabled | default "true" }}"
             - name: WEBHOOK_TUNNEL_URL
@@ -96,5 +96,9 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
         {{- toYaml . | nindent 8 }}
       {{- end }}
