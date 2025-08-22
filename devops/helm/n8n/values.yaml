@@ -55,7 +55,7 @@ service:
   port: 5678
   dnsLabel: "n8n"
   protocol: https
-  n8nPath: "/n8n"
+  n8nPath: "/n8n/"
   enforceSettingsFilePermissions: true
   runnersEnabled: true
   genericTimezone: "America/Chicago"
