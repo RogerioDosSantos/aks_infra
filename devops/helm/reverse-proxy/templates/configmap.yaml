@@ -19,10 +19,14 @@ data:
             respond "Under Construction" 200
         }
 
-        handle /wiki {
+        handle /wiki-source {
             redir {{ .Values.reverseProxy.wikiUrl }}
         }
 
+        handle_path /wiki* {
+            reverse_proxy wiki-dev:8000
+        }
+        
         handle_path /api/python-rest* {
             reverse_proxy python-rest-api-dev:9001
         }
