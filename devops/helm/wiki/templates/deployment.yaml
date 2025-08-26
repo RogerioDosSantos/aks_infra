@@ -44,6 +44,11 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          # Set environment variables for the container
+          env:
+            - name: MKDOCS_SITE_URL
+              value: "{{ .Values.service.baseUrl | default "https://aks-infra-dev.centralus.cloudapp.azure.com/wiki" }}"
+
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}

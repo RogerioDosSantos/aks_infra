@@ -23,7 +23,10 @@ data:
             redir {{ .Values.reverseProxy.wikiUrl }}
         }
 
-        handle_path /wiki* {
+        handle /wiki {
+            redir /wiki/ 302
+        }
+        handle_path /wiki/* {
             reverse_proxy wiki-dev:8000
         }
         
